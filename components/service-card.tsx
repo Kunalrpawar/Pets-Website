@@ -2,6 +2,9 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Star, Clock, MapPin } from "lucide-react"
+import Link from "next/link"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 interface ServiceCardProps {
   title: string
@@ -11,6 +14,7 @@ interface ServiceCardProps {
   image: string
   category: string
   featured?: boolean
+  id?: number
 }
 
 export function ServiceCard({
@@ -21,9 +25,24 @@ export function ServiceCard({
   image,
   category,
   featured = false,
+  id = 1
 }: ServiceCardProps) {
+  const router = typeof window !== 'undefined' ? { push: (url: string) => window.location.href = url } : null;
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleBookNow = () => {
+    // In a real app, this would navigate to the booking page for this specific service
+    if (router) {
+      router.push(`/booking/${id}?service=${encodeURIComponent(title)}`);
+    }
+  };
+
   return (
-    <Card className={`overflow-hidden transition-all hover:shadow-lg ${featured ? "border-primary" : ""}`}>
+    <Card 
+      className={`overflow-hidden transition-all ${isHovered ? 'shadow-lg transform scale-[1.02]' : ''} ${featured ? "border-primary" : ""}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <div className="relative">
         <img src={image || "/placeholder.svg"} alt={title} className="w-full h-48 object-cover" />
         {featured && <Badge className="absolute top-2 right-2 bg-primary">Popular</Badge>}
@@ -54,7 +73,7 @@ export function ServiceCard({
         </div>
       </CardContent>
       <CardFooter className="p-6 pt-0">
-        <Button className="w-full">Book Now</Button>
+        <Button className="w-full" onClick={handleBookNow}>Book Now</Button>
       </CardFooter>
     </Card>
   )

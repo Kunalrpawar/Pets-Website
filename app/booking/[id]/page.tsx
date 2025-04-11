@@ -1,287 +1,230 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Separator } from "@/components/ui/separator"
-import { Calendar, Check, Clock, CreditCard, MapPin, MessageSquare, Star } from "lucide-react"
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Calendar } from "@/components/ui/calendar"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { format } from "date-fns"
+import { Calendar as CalendarIcon, Clock, MapPin, ArrowLeft } from "lucide-react"
+import Link from "next/link"
+import { cn } from "@/lib/utils"
 
 export default function BookingPage({ params }: { params: { id: string } }) {
-  // This would come from your database in a real app
-  const booking = {
-    id: params.id,
-    service: "Premium Dog Walking",
-    description: "One-on-one attention with photo updates",
-    provider: {
-      id: "provider-1",
-      name: "Sarah Johnson",
-      role: "Dog Walker & Trainer",
-      image: "/placeholder.svg?height=300&width=300",
-      rating: 4.9,
-      reviews: 124,
-      location: "Brooklyn, NY",
-      verified: true,
-      bio: "Professional dog walker with 5+ years of experience. Certified in pet first aid and CPR.",
-    },
-    pet: {
-      id: "pet-1",
-      name: "Max",
-      type: "Dog",
-      breed: "Golden Retriever",
-      age: "3 years",
-      image: "/placeholder.svg?height=60&width=60",
-    },
-    date: "May 15, 2023",
-    time: "3:00 PM - 4:00 PM",
-    duration: "1 hour",
-    location: "Central Park, New York",
-    price: 30,
-    status: "confirmed",
-    paymentMethod: "Credit Card (**** 4242)",
-    bookingDate: "May 10, 2023",
-    notes: "Max loves to play fetch. Please bring his favorite ball.",
+  const [service, setService] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const [date, setDate] = useState<Date | undefined>(undefined)
+  const [time, setTime] = useState("")
+  const [specialRequests, setSpecialRequests] = useState("")
+
+  // Get the service ID from URL params
+  const id = params.id
+
+  // In a real app, fetch the service details from an API
+  useEffect(() => {
+    // Simulate API call
+    setTimeout(() => {
+      // This would be fetched from your database in a real app
+      const mockServices = [
+        {
+          id: 1,
+          title: "Daily Dog Walking",
+          description: "Professional dog walkers for your furry friend",
+          price: 20,
+          rating: 4.8,
+          image: "/images/dog walking.jpeg",
+          category: "walking",
+          featured: false,
+        },
+        {
+          id: 2,
+          title: "Group Dog Walking",
+          description: "Socialization and exercise in a group setting",
+          price: 15,
+          rating: 4.6,
+          image: "/images/group dog.jpeg",
+          category: "walking",
+          featured: false,
+        },
+        {
+          id: 3,
+          title: "Premium Dog Walking",
+          description: "One-on-one attention with photo updates",
+          price: 30,
+          rating: 4.9,
+          image: "/images/gropuss.jpeg",
+          category: "walking",
+          featured: true,
+        },
+      ]
+
+      const foundService = mockServices.find((s) => s.id.toString() === id)
+      setService(foundService || {
+        title: "Service Details",
+        description: "This service is not available at the moment",
+        price: 0,
+        image: "/placeholder.svg"
+      })
+      setLoading(false)
+    }, 1000)
+  }, [id])
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    // In a real app, send the booking data to your backend
+    alert(`Booking confirmed for ${service?.title} on ${date ? format(date, 'PPP') : 'N/A'} at ${time}`)
+    
+    // Redirect to confirmation page
+    window.location.href = "/dashboard"
+  }
+
+  // Get time slots (in a real app, this would be based on availability)
+  const timeSlots = [
+    "09:00 AM", "10:00 AM", "11:00 AM", 
+    "12:00 PM", "01:00 PM", "02:00 PM", 
+    "03:00 PM", "04:00 PM", "05:00 PM"
+  ]
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse text-lg">Loading booking details...</div>
+      </div>
+    )
   }
 
   return (
-    <main className="container mx-auto px-4 py-8">
-      <div className="flex flex-col md:flex-row justify-between items-start gap-6">
-        {/* Booking Details */}
-        <div className="w-full md:w-2/3 space-y-6">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div>
-              <h1 className="text-3xl font-bold">{booking.service}</h1>
-              <p className="text-muted-foreground">Booking #{booking.id}</p>
-            </div>
-            <Badge className="text-sm" variant={booking.status === "confirmed" ? "default" : "outline"}>
-              {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
-            </Badge>
+    <main className="min-h-screen py-12">
+      <div className="container mx-auto px-4">
+        <Link href="/services" className="flex items-center text-primary mb-8">
+          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Services
+        </Link>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Service Details */}
+          <div className="lg:col-span-1">
+            <Card>
+              <div className="relative">
+                <img src={service.image} alt={service.title} className="w-full h-48 object-cover" />
+              </div>
+              <CardContent className="p-6">
+                <h1 className="text-2xl font-bold mb-2">{service.title}</h1>
+                <p className="text-muted-foreground mb-4">{service.description}</p>
+                
+                <div className="flex items-center text-sm text-muted-foreground mb-4">
+                  <Clock className="h-4 w-4 mr-1" />
+                  <span>30-60 min</span>
+                  <MapPin className="h-4 w-4 ml-4 mr-1" />
+                  <span>1.2 miles away</span>
+                </div>
+
+                <div className="font-semibold text-xl">
+                  ${service.price}
+                  <span className="text-sm text-muted-foreground">/hour</span>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Booking Details</CardTitle>
-              <CardDescription>Information about your upcoming service</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-sm font-medium text-muted-foreground mb-1">Date & Time</h3>
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-5 w-5 text-primary" />
-                      <span className="font-medium">{booking.date}</span>
+          {/* Booking Form */}
+          <div className="lg:col-span-2">
+            <Card>
+              <CardContent className="p-6">
+                <h2 className="text-xl font-bold mb-6">Book Your Appointment</h2>
+                
+                <form onSubmit={handleSubmit}>
+                  <div className="space-y-6">
+                    {/* Date Selection */}
+                    <div className="space-y-2">
+                      <Label htmlFor="date">Select Date</Label>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className={cn(
+                              "w-full justify-start text-left font-normal",
+                              !date && "text-muted-foreground"
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {date ? format(date, "PPP") : "Select a date"}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0">
+                          <Calendar
+                            mode="single"
+                            selected={date}
+                            onSelect={setDate}
+                            initialFocus
+                            disabled={(date) => 
+                              date < new Date(new Date().setHours(0, 0, 0, 0))
+                            }
+                          />
+                        </PopoverContent>
+                      </Popover>
                     </div>
-                    <div className="flex items-center gap-2 mt-1">
-                      <Clock className="h-5 w-5 text-primary" />
-                      <span>
-                        {booking.time} ({booking.duration})
-                      </span>
-                    </div>
-                  </div>
 
-                  <div>
-                    <h3 className="text-sm font-medium text-muted-foreground mb-1">Location</h3>
-                    <div className="flex items-center gap-2">
-                      <MapPin className="h-5 w-5 text-primary" />
-                      <span>{booking.location}</span>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="text-sm font-medium text-muted-foreground mb-1">Pet</h3>
-                    <div className="flex items-center gap-2">
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src={booking.pet.image} />
-                        <AvatarFallback>{booking.pet.name.charAt(0)}</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <span className="font-medium">{booking.pet.name}</span>
-                        <p className="text-sm text-muted-foreground">
-                          {booking.pet.breed}, {booking.pet.age}
-                        </p>
+                    {/* Time Selection */}
+                    <div className="space-y-2">
+                      <Label htmlFor="time">Select Time</Label>
+                      <div className="grid grid-cols-3 gap-2">
+                        {timeSlots.map((timeSlot) => (
+                          <Button
+                            key={timeSlot}
+                            type="button"
+                            variant={time === timeSlot ? "default" : "outline"}
+                            className="flex items-center justify-center"
+                            onClick={() => setTime(timeSlot)}
+                          >
+                            {timeSlot}
+                          </Button>
+                        ))}
                       </div>
                     </div>
-                  </div>
-                </div>
 
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-sm font-medium text-muted-foreground mb-1">Payment</h3>
-                    <div className="flex items-center gap-2">
-                      <CreditCard className="h-5 w-5 text-primary" />
-                      <span>{booking.paymentMethod}</span>
+                    {/* Special Requests */}
+                    <div className="space-y-2">
+                      <Label htmlFor="specialRequests">Special Requests (Optional)</Label>
+                      <Input
+                        id="specialRequests"
+                        placeholder="Any special instructions for the service provider"
+                        value={specialRequests}
+                        onChange={(e) => setSpecialRequests(e.target.value)}
+                      />
                     </div>
-                    <p className="mt-1 font-medium">${booking.price}.00</p>
                   </div>
 
-                  <div>
-                    <h3 className="text-sm font-medium text-muted-foreground mb-1">Booking Date</h3>
-                    <p>{booking.bookingDate}</p>
+                  <div className="mt-8 border-t pt-6">
+                    <div className="flex justify-between mb-4">
+                      <span>Service Fee</span>
+                      <span>${service.price}</span>
+                    </div>
+                    <div className="flex justify-between mb-4 text-sm text-muted-foreground">
+                      <span>Platform Fee</span>
+                      <span>$2.00</span>
+                    </div>
+                    <div className="flex justify-between font-semibold text-lg">
+                      <span>Total</span>
+                      <span>${(service.price + 2).toFixed(2)}</span>
+                    </div>
                   </div>
-
-                  <div>
-                    <h3 className="text-sm font-medium text-muted-foreground mb-1">Special Notes</h3>
-                    <p className="text-sm">{booking.notes}</p>
-                  </div>
-                </div>
-              </div>
-
-              <Separator />
-
-              <div className="flex flex-col sm:flex-row justify-between gap-4">
-                <Button variant="outline" className="sm:w-auto">
-                  Reschedule
+                </form>
+              </CardContent>
+              <CardFooter className="p-6 pt-0">
+                <Button 
+                  onClick={handleSubmit} 
+                  className="w-full" 
+                  size="lg"
+                  disabled={!date || !time}
+                >
+                  Confirm Booking
                 </Button>
-                <div className="flex gap-2">
-                  <Button variant="outline" className="flex-1 sm:flex-none">
-                    Contact Provider
-                  </Button>
-                  <Button variant="destructive" className="flex-1 sm:flex-none">
-                    Cancel Booking
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Service Description</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>{booking.description}</p>
-              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                <div className="flex items-center gap-2">
-                  <Check className="h-5 w-5 text-primary" />
-                  <span>One-on-one attention</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="h-5 w-5 text-primary" />
-                  <span>Photo updates</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="h-5 w-5 text-primary" />
-                  <span>GPS tracking</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="h-5 w-5 text-primary" />
-                  <span>Poop bags included</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="h-5 w-5 text-primary" />
-                  <span>Fresh water provided</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="h-5 w-5 text-primary" />
-                  <span>Treats (if allowed)</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Provider Details */}
-        <div className="w-full md:w-1/3 space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Service Provider</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center gap-4">
-                <Avatar className="h-16 w-16">
-                  <AvatarImage src={booking.provider.image} />
-                  <AvatarFallback>{booking.provider.name.charAt(0)}</AvatarFallback>
-                </Avatar>
-                <div>
-                  <h3 className="font-semibold text-lg">{booking.provider.name}</h3>
-                  <p className="text-muted-foreground">{booking.provider.role}</p>
-                  <div className="flex items-center mt-1">
-                    <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
-                    <span className="ml-1 font-medium">{booking.provider.rating}</span>
-                    <span className="ml-1 text-muted-foreground">({booking.provider.reviews} reviews)</span>
-                  </div>
-                </div>
-              </div>
-
-              <Separator />
-
-              <div>
-                <h4 className="font-medium mb-2">About</h4>
-                <p className="text-sm">{booking.provider.bio}</p>
-              </div>
-
-              <div className="flex flex-wrap gap-2">
-                <Badge variant="outline">Dogs</Badge>
-                <Badge variant="outline">Cats</Badge>
-                <Badge variant="outline">First Aid Certified</Badge>
-                <Badge variant="outline">Background Checked</Badge>
-              </div>
-
-              <div className="pt-2">
-                <Button className="w-full" variant="outline">
-                  <MessageSquare className="mr-2 h-4 w-4" />
-                  Message Sarah
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>What to Expect</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Tabs defaultValue="before">
-                <TabsList className="grid w-full grid-cols-3">
-                  <TabsTrigger value="before">Before</TabsTrigger>
-                  <TabsTrigger value="during">During</TabsTrigger>
-                  <TabsTrigger value="after">After</TabsTrigger>
-                </TabsList>
-                <TabsContent value="before" className="space-y-4 pt-4">
-                  <div className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-primary mt-0.5" />
-                    <p className="text-sm">Provider will arrive 5-10 minutes early</p>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-primary mt-0.5" />
-                    <p className="text-sm">Have your pet ready with collar/leash</p>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-primary mt-0.5" />
-                    <p className="text-sm">Provider will confirm any special instructions</p>
-                  </div>
-                </TabsContent>
-                <TabsContent value="during" className="space-y-4 pt-4">
-                  <div className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-primary mt-0.5" />
-                    <p className="text-sm">You'll receive photo updates</p>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-primary mt-0.5" />
-                    <p className="text-sm">GPS tracking available in the app</p>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-primary mt-0.5" />
-                    <p className="text-sm">Provider follows your specified route</p>
-                  </div>
-                </TabsContent>
-                <TabsContent value="after" className="space-y-4 pt-4">
-                  <div className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-primary mt-0.5" />
-                    <p className="text-sm">Provider will send a summary report</p>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-primary mt-0.5" />
-                    <p className="text-sm">You'll be asked to leave a review</p>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-primary mt-0.5" />
-                    <p className="text-sm">Payment will be processed automatically</p>
-                  </div>
-                </TabsContent>
-              </Tabs>
-            </CardContent>
-          </Card>
+              </CardFooter>
+            </Card>
+          </div>
         </div>
       </div>
     </main>

@@ -1,3 +1,5 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -5,6 +7,8 @@ import { Slider } from "@/components/ui/slider"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ServiceCard } from "@/components/service-card"
 import { Search, MapPin, SlidersHorizontal, Star } from "lucide-react"
+import { useState, useEffect } from "react"
+import { useSearchParams } from "next/navigation"
 
 export default function ServicesPage() {
   // This would come from your database in a real app
@@ -15,7 +19,7 @@ export default function ServicesPage() {
       description: "Professional dog walkers for your furry friend",
       price: 20,
       rating: 4.8,
-      image: "/placeholder.svg?height=200&width=300",
+      image: "/images/dog walking.jpeg",
       category: "walking",
       featured: false,
     },
@@ -25,7 +29,7 @@ export default function ServicesPage() {
       description: "Socialization and exercise in a group setting",
       price: 15,
       rating: 4.6,
-      image: "/placeholder.svg?height=200&width=300",
+      image: "/images/group dog.jpeg",
       category: "walking",
       featured: false,
     },
@@ -35,7 +39,7 @@ export default function ServicesPage() {
       description: "One-on-one attention with photo updates",
       price: 30,
       rating: 4.9,
-      image: "/placeholder.svg?height=200&width=300",
+      image: "/images/gropuss.jpeg",
       category: "walking",
       featured: true,
     },
@@ -101,6 +105,99 @@ export default function ServicesPage() {
     },
   ]
 
+  // State for search and filters
+  const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+  const [searchQuery, setSearchQuery] = useState(searchParams?.get('q') || "");
+  const [locationQuery, setLocationQuery] = useState(searchParams?.get('loc') || "");
+  const [activeTab, setActiveTab] = useState("all");
+  const [priceRange, setPriceRange] = useState([0, 200]);
+  const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
+  const [selectedServiceTypes, setSelectedServiceTypes] = useState<string[]>([]);
+  const [filteredServices, setFilteredServices] = useState(services);
+
+  // Apply filters
+  useEffect(() => {
+    let results = services;
+    
+    // Filter by search query
+    if (searchQuery) {
+      results = results.filter(service => 
+        service.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        service.description.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+    
+    // Filter by category/tab
+    if (activeTab !== 'all') {
+      results = results.filter(service => service.category === activeTab);
+    }
+    
+    // Filter by price range
+    results = results.filter(service => 
+      service.price >= priceRange[0] && service.price <= priceRange[1]
+    );
+    
+    // Filter by rating
+    if (selectedRatings.length > 0) {
+      results = results.filter(service => 
+        selectedRatings.some(rating => service.rating >= rating)
+      );
+    }
+    
+    // Filter by service type
+    if (selectedServiceTypes.length > 0) {
+      const categoryMap: Record<string, string> = {
+        "dog-walking": "walking",
+        "pet-grooming": "grooming",
+        "pet-boarding": "boarding",
+        "pet-training": "training",
+      };
+      
+      results = results.filter(service => 
+        selectedServiceTypes.some(type => categoryMap[type] === service.category)
+      );
+    }
+    
+    setFilteredServices(results);
+  }, [searchQuery, activeTab, priceRange, selectedRatings, selectedServiceTypes]);
+
+  // Handle search button click
+  const handleSearch = () => {
+    // Update the URL for bookmarking/sharing
+    const url = new URL(window.location.href);
+    url.searchParams.set('q', searchQuery);
+    url.searchParams.set('loc', locationQuery);
+    window.history.pushState({}, '', url.toString());
+  };
+
+  // Handle checkbox change for service types
+  const handleServiceTypeChange = (type: string, checked: boolean) => {
+    if (checked) {
+      setSelectedServiceTypes(prev => [...prev, type]);
+    } else {
+      setSelectedServiceTypes(prev => prev.filter(t => t !== type));
+    }
+  };
+
+  // Handle checkbox change for ratings
+  const handleRatingChange = (rating: number, checked: boolean) => {
+    if (checked) {
+      setSelectedRatings(prev => [...prev, rating]);
+    } else {
+      setSelectedRatings(prev => prev.filter(r => r !== rating));
+    }
+  };
+
+  // Reset all filters
+  const resetFilters = () => {
+    setSearchQuery("");
+    setLocationQuery("");
+    setActiveTab("all");
+    setPriceRange([0, 200]);
+    setSelectedRatings([]);
+    setSelectedServiceTypes([]);
+  };
+
   return (
     <main className="min-h-screen">
       <section className="bg-primary text-primary-foreground py-12">
@@ -117,6 +214,9 @@ export default function ServicesPage() {
                     type="text"
                     placeholder="What service do you need?"
                     className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                   />
                 </div>
                 <div className="flex-1 relative">
@@ -125,9 +225,12 @@ export default function ServicesPage() {
                     type="text"
                     placeholder="Your location"
                     className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                    value={locationQuery}
+                    onChange={(e) => setLocationQuery(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                   />
                 </div>
-                <Button size="lg" className="md:w-auto w-full">
+                <Button size="lg" className="md:w-auto w-full" onClick={handleSearch}>
                   Search
                 </Button>
               </div>
@@ -144,7 +247,7 @@ export default function ServicesPage() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-lg font-semibold">Filters</h3>
-                  <Button variant="ghost" size="sm" className="h-8 px-2">
+                  <Button variant="ghost" size="sm" className="h-8 px-2" onClick={resetFilters}>
                     Reset
                   </Button>
                 </div>
@@ -156,7 +259,13 @@ export default function ServicesPage() {
                     <div className="space-y-2">
                       {["Dog Walking", "Pet Grooming", "Pet Boarding", "Pet Training", "Pet Sitting"].map((service) => (
                         <div key={service} className="flex items-center">
-                          <Checkbox id={service.toLowerCase().replace(" ", "-")} />
+                          <Checkbox 
+                            id={service.toLowerCase().replace(" ", "-")} 
+                            checked={selectedServiceTypes.includes(service.toLowerCase().replace(" ", "-"))}
+                            onCheckedChange={(checked) => 
+                              handleServiceTypeChange(service.toLowerCase().replace(" ", "-"), checked === true)
+                            }
+                          />
                           <label
                             htmlFor={service.toLowerCase().replace(" ", "-")}
                             className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -171,10 +280,15 @@ export default function ServicesPage() {
                   {/* Price Range */}
                   <div>
                     <h4 className="font-medium mb-3">Price Range</h4>
-                    <Slider defaultValue={[0, 100]} max={200} step={1} />
+                    <Slider 
+                      value={priceRange} 
+                      max={200} 
+                      step={1} 
+                      onValueChange={(value) => setPriceRange(value as number[])}
+                    />
                     <div className="flex justify-between mt-2">
-                      <span className="text-sm">$0</span>
-                      <span className="text-sm">$200+</span>
+                      <span className="text-sm">${priceRange[0]}</span>
+                      <span className="text-sm">${priceRange[1]}</span>
                     </div>
                   </div>
 
@@ -184,7 +298,13 @@ export default function ServicesPage() {
                     <div className="space-y-2">
                       {[5, 4, 3, 2, 1].map((rating) => (
                         <div key={rating} className="flex items-center">
-                          <Checkbox id={`rating-${rating}`} />
+                          <Checkbox 
+                            id={`rating-${rating}`} 
+                            checked={selectedRatings.includes(rating)}
+                            onCheckedChange={(checked) => 
+                              handleRatingChange(rating, checked === true)
+                            }
+                          />
                           <label
                             htmlFor={`rating-${rating}`}
                             className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center"
@@ -202,25 +322,7 @@ export default function ServicesPage() {
                     </div>
                   </div>
 
-                  {/* Availability */}
-                  <div>
-                    <h4 className="font-medium mb-3">Availability</h4>
-                    <div className="space-y-2">
-                      {["Today", "Tomorrow", "This Week", "This Weekend", "Next Week"].map((time) => (
-                        <div key={time} className="flex items-center">
-                          <Checkbox id={time.toLowerCase().replace(" ", "-")} />
-                          <label
-                            htmlFor={time.toLowerCase().replace(" ", "-")}
-                            className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                          >
-                            {time}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <Button className="w-full">Apply Filters</Button>
+                  <Button className="w-full" onClick={handleSearch}>Apply Filters</Button>
                 </div>
               </CardContent>
             </Card>
@@ -229,7 +331,9 @@ export default function ServicesPage() {
           {/* Services List */}
           <div className="lg:w-3/4">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold">Available Services</h2>
+              <h2 className="text-2xl font-bold">
+                {filteredServices.length} Available Service{filteredServices.length !== 1 ? 's' : ''}
+              </h2>
               <div className="flex items-center gap-2">
                 <Button variant="outline" size="sm" className="flex items-center gap-1">
                   <SlidersHorizontal className="h-4 w-4" />
@@ -239,7 +343,12 @@ export default function ServicesPage() {
               </div>
             </div>
 
-            <Tabs defaultValue="all" className="w-full">
+            <Tabs 
+              defaultValue="all" 
+              value={activeTab} 
+              onValueChange={setActiveTab} 
+              className="w-full"
+            >
               <TabsList className="mb-8">
                 <TabsTrigger value="all">All Services</TabsTrigger>
                 <TabsTrigger value="walking">Dog Walking</TabsTrigger>
@@ -249,10 +358,39 @@ export default function ServicesPage() {
               </TabsList>
 
               <TabsContent value="all" className="mt-0">
+                {filteredServices.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredServices.map((service) => (
+                      <ServiceCard
+                        key={service.id}
+                        id={service.id}
+                        title={service.title}
+                        description={service.description}
+                        price={service.price}
+                        rating={service.rating}
+                        image={service.image}
+                        category={service.category}
+                        featured={service.featured}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <h3 className="text-xl font-semibold mb-2">No services found</h3>
+                    <p className="text-muted-foreground mb-4">Try adjusting your search or filter criteria</p>
+                    <Button onClick={resetFilters}>Reset Filters</Button>
+                  </div>
+                )}
+              </TabsContent>
+
+              {/* Other tab contents will be handled by the filtering logic */}
+              <TabsContent value="walking" className="mt-0">
+                {/* Content will be rendered by the filteredServices */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {services.map((service) => (
+                  {filteredServices.map((service) => (
                     <ServiceCard
                       key={service.id}
+                      id={service.id}
                       title={service.title}
                       description={service.description}
                       price={service.price}
@@ -265,89 +403,17 @@ export default function ServicesPage() {
                 </div>
               </TabsContent>
 
-              <TabsContent value="walking" className="mt-0">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {services
-                    .filter((service) => service.category === "walking")
-                    .map((service) => (
-                      <ServiceCard
-                        key={service.id}
-                        title={service.title}
-                        description={service.description}
-                        price={service.price}
-                        rating={service.rating}
-                        image={service.image}
-                        category={service.category}
-                        featured={service.featured}
-                      />
-                    ))}
-                </div>
-              </TabsContent>
+              {/* Similar TabsContent for other categories */}
 
-              {/* Other tab contents would be similar */}
-              <TabsContent value="grooming" className="mt-0">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {services
-                    .filter((service) => service.category === "grooming")
-                    .map((service) => (
-                      <ServiceCard
-                        key={service.id}
-                        title={service.title}
-                        description={service.description}
-                        price={service.price}
-                        rating={service.rating}
-                        image={service.image}
-                        category={service.category}
-                        featured={service.featured}
-                      />
-                    ))}
-                </div>
-              </TabsContent>
-
-              <TabsContent value="boarding" className="mt-0">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {services
-                    .filter((service) => service.category === "boarding")
-                    .map((service) => (
-                      <ServiceCard
-                        key={service.id}
-                        title={service.title}
-                        description={service.description}
-                        price={service.price}
-                        rating={service.rating}
-                        image={service.image}
-                        category={service.category}
-                        featured={service.featured}
-                      />
-                    ))}
-                </div>
-              </TabsContent>
-
-              <TabsContent value="training" className="mt-0">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {services
-                    .filter((service) => service.category === "training")
-                    .map((service) => (
-                      <ServiceCard
-                        key={service.id}
-                        title={service.title}
-                        description={service.description}
-                        price={service.price}
-                        rating={service.rating}
-                        image={service.image}
-                        category={service.category}
-                        featured={service.featured}
-                      />
-                    ))}
-                </div>
-              </TabsContent>
             </Tabs>
 
-            <div className="mt-8 flex justify-center">
-              <Button variant="outline" size="lg">
-                Load More
-              </Button>
-            </div>
+            {filteredServices.length > 6 && (
+              <div className="mt-8 text-center">
+                <Button variant="outline" size="lg">
+                  Load More Services
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </section>

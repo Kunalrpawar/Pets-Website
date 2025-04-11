@@ -1,17 +1,64 @@
+"use client"
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Search, MapPin, Star, Clock, Shield, Heart } from "lucide-react"
+import { Search, MapPin, Star, Clock, Shield, Heart, Plus } from "lucide-react"
 import { HeroSection } from "@/components/hero-section"
 import { ServiceCard } from "@/components/service-card"
 import { ProviderCard } from "@/components/provider-card"
 import { TestimonialCard } from "@/components/testimonial-card"
 import { HowItWorks } from "@/components/how-it-works"
+import { ChatBot } from "@/components/chat-bot"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export default function Home() {
+  const [serviceSearch, setServiceSearch] = useState("");
+  const [location, setLocation] = useState("");
+  const [becomeProviderOpen, setBecomeProviderOpen] = useState(false);
+  const [findServiceOpen, setFindServiceOpen] = useState(false);
+  
+  // Provider form state
+  const [providerName, setProviderName] = useState("")
+  const [providerEmail, setProviderEmail] = useState("")
+  const [providerPhone, setProviderPhone] = useState("")
+  const [serviceOffered, setServiceOffered] = useState("")
+  const [agreeTerms, setAgreeTerms] = useState(false)
+  
+  // Service form state
+  const [serviceType, setServiceType] = useState("")
+  const [serviceLocation, setServiceLocation] = useState("")
+  
+  // Handle search button click
+  const handleSearch = () => {
+    // In a real app, this would navigate to search results with query params
+    // For now, we'll just navigate to the services page
+    window.location.href = `/services?q=${encodeURIComponent(serviceSearch)}&loc=${encodeURIComponent(location)}`;
+  };
+  
+  const handleFindServiceSubmit = () => {
+    // In a real app, this would navigate with the form data
+    window.location.href = `/services?type=${encodeURIComponent(serviceType)}&location=${encodeURIComponent(serviceLocation)}`;
+  };
+  
+  const handleProviderSubmit = () => {
+    // In a real app, this would submit the provider application form
+    alert("Thank you for your interest in becoming a provider! We'll review your application and contact you soon.");
+    setBecomeProviderOpen(false);
+  };
+
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen relative">
+      {/* ChatBot */}
+      <ChatBot />
+
       <HeroSection />
 
       {/* Search Section */}
@@ -25,6 +72,9 @@ export default function Home() {
                   type="text"
                   placeholder="What service do you need?"
                   className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                  value={serviceSearch}
+                  onChange={(e) => setServiceSearch(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                 />
               </div>
               <div className="flex-1 relative">
@@ -33,9 +83,12 @@ export default function Home() {
                   type="text"
                   placeholder="Your location"
                   className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                 />
               </div>
-              <Button size="lg" className="md:w-auto w-full">
+              <Button size="lg" className="md:w-auto w-full" onClick={handleSearch}>
                 Find Services
               </Button>
             </div>
@@ -122,11 +175,63 @@ export default function Home() {
 
           {/* Other tab contents would be similar */}
           <TabsContent value="boarding" className="mt-0">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">{/* Boarding services would go here */}</div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <ServiceCard
+                title="Home Pet Boarding"
+                description="Your pet stays in a sitter's loving home"
+                price={45}
+                rating={4.7}
+                image="/placeholder.svg?height=200&width=300"
+                category="boarding"
+              />
+              <ServiceCard
+                title="Luxury Pet Hotel"
+                description="Premium boarding with private suites and playtime"
+                price={75}
+                rating={4.9}
+                image="/placeholder.svg?height=200&width=300"
+                category="boarding"
+                featured={true}
+              />
+              <ServiceCard
+                title="Cat Boarding"
+                description="Specialized boarding just for cats with climbing trees"
+                price={40}
+                rating={4.8}
+                image="/placeholder.svg?height=200&width=300"
+                category="boarding"
+              />
+            </div>
           </TabsContent>
 
           <TabsContent value="training" className="mt-0">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">{/* Training services would go here */}</div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <ServiceCard
+                title="Basic Obedience Training"
+                description="Essential commands and behavior training"
+                price={50}
+                rating={4.6}
+                image="/placeholder.svg?height=200&width=300"
+                category="training"
+              />
+              <ServiceCard
+                title="Puppy Training"
+                description="Early socialization and basic training for puppies"
+                price={60}
+                rating={4.8}
+                image="/placeholder.svg?height=200&width=300"
+                category="training"
+                featured={true}
+              />
+              <ServiceCard
+                title="Advanced Training"
+                description="Complex commands and specialized behaviors"
+                price={85}
+                rating={4.9}
+                image="/placeholder.svg?height=200&width=300"
+                category="training"
+              />
+            </div>
           </TabsContent>
         </Tabs>
       </section>
@@ -259,15 +364,158 @@ export default function Home() {
             Join thousands of happy pet parents who've found reliable, loving care for their furry family members.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary">
+            <Button 
+              size="lg" 
+              variant="secondary" 
+              onClick={() => setBecomeProviderOpen(true)}
+            >
               Become a Provider
             </Button>
-            <Button size="lg" variant="outline" className="bg-white text-primary hover:bg-white/90">
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="bg-white text-primary hover:bg-white/90"
+              onClick={() => setFindServiceOpen(true)}
+            >
               Find Services
             </Button>
           </div>
         </div>
       </section>
+
+      {/* Find Service Modal */}
+      <Dialog open={findServiceOpen} onOpenChange={setFindServiceOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Find the Perfect Pet Service</DialogTitle>
+            <DialogDescription>
+              Tell us what you're looking for and we'll match you with the best service providers.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="service-type" className="text-right">
+                Service
+              </Label>
+              <Select value={serviceType} onValueChange={setServiceType}>
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Select a service" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="dog-walking">Dog Walking</SelectItem>
+                  <SelectItem value="pet-grooming">Pet Grooming</SelectItem>
+                  <SelectItem value="pet-boarding">Pet Boarding</SelectItem>
+                  <SelectItem value="pet-training">Pet Training</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="location" className="text-right">
+                Location
+              </Label>
+              <Input
+                id="location"
+                placeholder="Your city or zip code"
+                className="col-span-3"
+                value={serviceLocation}
+                onChange={(e) => setServiceLocation(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type="submit" onClick={handleFindServiceSubmit}>Find Services</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      {/* Become Provider Modal */}
+      <Dialog open={becomeProviderOpen} onOpenChange={setBecomeProviderOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Become a Pet Service Provider</DialogTitle>
+            <DialogDescription>
+              Join our network of trusted pet care professionals. Fill out the form below to get started.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name" className="text-right">
+                Name
+              </Label>
+              <Input
+                id="name"
+                placeholder="Your full name"
+                className="col-span-3"
+                value={providerName}
+                onChange={(e) => setProviderName(e.target.value)}
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="email" className="text-right">
+                Email
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="Your email address"
+                className="col-span-3"
+                value={providerEmail}
+                onChange={(e) => setProviderEmail(e.target.value)}
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="phone" className="text-right">
+                Phone
+              </Label>
+              <Input
+                id="phone"
+                placeholder="Your phone number"
+                className="col-span-3"
+                value={providerPhone}
+                onChange={(e) => setProviderPhone(e.target.value)}
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="service-offered" className="text-right">
+                Service
+              </Label>
+              <Select value={serviceOffered} onValueChange={setServiceOffered}>
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Select a service you offer" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="dog-walking">Dog Walking</SelectItem>
+                  <SelectItem value="pet-grooming">Pet Grooming</SelectItem>
+                  <SelectItem value="pet-boarding">Pet Boarding</SelectItem>
+                  <SelectItem value="pet-training">Pet Training</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-center space-x-2 ml-auto">
+              <Checkbox 
+                id="terms" 
+                checked={agreeTerms}
+                onCheckedChange={(checked) => setAgreeTerms(checked === true)}
+              />
+              <label
+                htmlFor="terms"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                I agree to the terms and conditions
+              </label>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button 
+              type="submit" 
+              onClick={handleProviderSubmit}
+              disabled={!agreeTerms || !providerName || !providerEmail || !providerPhone || !serviceOffered}
+            >
+              Submit Application
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </main>
   )
 }
