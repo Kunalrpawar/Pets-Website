@@ -19,27 +19,25 @@ export default function MessagesPage() {
   const chats = [
     {
       id: 1,
-      name: "Sarah Johnson",
-      role: "Dog Walker",
-      avatar: "/placeholder.svg?height=40&width=40",
-      lastMessage: "I'll be there at 3 PM tomorrow!",
-      time: "10:30 AM",
+      name: "Kunal Pawar",
+      role: "Dog Walker & Trainer",
+      image: "/images/doc1.jpeg",
+      lastMessage: "Your next session is confirmed for tomorrow at 3 PM",
+      time: "2 hours ago",
       unread: 2,
-      online: true,
     },
     {
       id: 2,
-      name: "Michael Chen",
-      role: "Groomer",
-      avatar: "/placeholder.svg?height=40&width=40",
-      lastMessage: "Your appointment is confirmed for Friday",
-      time: "Yesterday",
+      name: "Pratham Kokardekar",
+      role: "Pet Boarder",
+      image: "/images/doc3.jpeg",
+      lastMessage: "Here are some photos from today's boarding session",
+      time: "5 hours ago",
       unread: 0,
-      online: false,
     },
     {
       id: 3,
-      name: "Jessica Williams",
+      name: "Sahik Kulkarni",
       role: "Pet Boarder",
       avatar: "/placeholder.svg?height=40&width=40",
       lastMessage: "Do you have any dietary restrictions for Max?",
@@ -53,7 +51,7 @@ export default function MessagesPage() {
     {
       id: 1,
       sender: "user",
-      text: "Hi Sarah, I need a dog walker for tomorrow afternoon. Are you available?",
+      text: "Hi kunal, I need a dog walker for tomorrow afternoon. Are you available?",
       time: "9:15 AM",
     },
     {
@@ -125,7 +123,7 @@ export default function MessagesPage() {
               <div className="flex items-start gap-3">
                 <div className="relative">
                   <Avatar>
-                    <AvatarImage src={chat.avatar} />
+                    <AvatarImage src={chat.image} />
                     <AvatarFallback>{chat.name.charAt(0)}</AvatarFallback>
                   </Avatar>
                   {chat.online && (
@@ -155,7 +153,7 @@ export default function MessagesPage() {
             <div className="p-4 border-b flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Avatar>
-                  <AvatarImage src={chats[selectedChat].avatar} />
+                  <AvatarImage src={chats[selectedChat].image} />
                   <AvatarFallback>{chats[selectedChat].name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div>
@@ -204,7 +202,7 @@ export default function MessagesPage() {
                 <div key={msg.id} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
                   {msg.sender === "other" && (
                     <Avatar className="mr-2 mt-1">
-                      <AvatarImage src={chats[selectedChat].avatar} />
+                      <AvatarImage src={chats[selectedChat].image} />
                       <AvatarFallback>{chats[selectedChat].name.charAt(0)}</AvatarFallback>
                     </Avatar>
                   )}

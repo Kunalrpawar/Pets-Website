@@ -50,26 +50,15 @@ export function ServiceCard({
           {category.charAt(0).toUpperCase() + category.slice(1)}
         </Badge>
       </div>
-      <CardContent className="p-6">
-        <div className="flex justify-between items-start mb-2">
-          <h3 className="text-xl font-semibold">{title}</h3>
-          <div className="flex items-center">
-            <Star className="h-4 w-4 text-yellow-500 mr-1 fill-yellow-500" />
-            <span className="text-sm font-medium">{rating}</span>
+      <CardContent className="p-4">
+        <h3 className="font-semibold text-lg mb-2">{title}</h3>
+        <p className="text-muted-foreground text-sm mb-4">{description}</p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1">
+            <Star className="h-4 w-4 fill-primary text-primary" />
+            <span className="font-medium">{rating}</span>
           </div>
-        </div>
-        <p className="text-muted-foreground mb-4">{description}</p>
-        <div className="flex items-center text-sm text-muted-foreground mb-4">
-          <Clock className="h-4 w-4 mr-1" />
-          <span>30-60 min</span>
-          <MapPin className="h-4 w-4 ml-4 mr-1" />
-          <span>1.2 miles away</span>
-        </div>
-        <div className="flex justify-between items-center">
-          <div className="font-semibold">
-            ${price}
-            <span className="text-sm text-muted-foreground">/hour</span>
-          </div>
+          <div className="font-semibold">Rs {price}/hr</div>
         </div>
       </CardContent>
       <CardFooter className="p-6 pt-0">

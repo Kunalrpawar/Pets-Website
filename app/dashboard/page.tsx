@@ -1,343 +1,279 @@
-import type React from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+"use client"
+
+import Link from "next/link"
+import { CalendarDays, Clock, DollarSign, Heart, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Calendar, Clock, DollarSign, MapPin, Star, Users } from "lucide-react"
+import { Progress } from "@/components/ui/progress"
+import { Badge } from "@/components/ui/badge"
 
 export default function DashboardPage() {
-  // This would come from your database in a real app
+  // Mock data - would come from an API in a real app
+  const stats = [
+    {
+      title: "Total Bookings",
+      value: "12",
+      icon: CalendarDays,
+      description: "Last 30 days",
+      change: "+2 from last month",
+      changeType: "increase"
+    },
+    {
+      title: "Favorite Providers",
+      value: "5",
+      icon: Heart,
+      description: "Providers you love",
+      change: "+1 new favorite",
+      changeType: "increase"
+    },
+    {
+      title: "Total Spent",
+      value: "$680",
+      icon: DollarSign,
+      description: "Last 30 days",
+      change: "-$45 from last month",
+      changeType: "decrease"
+    },
+    {
+      title: "Pet Care Hours",
+      value: "48",
+      icon: Clock,
+      description: "Last 30 days",
+      change: "+8 from last month",
+      changeType: "increase"
+    }
+  ]
+
   const upcomingBookings = [
     {
       id: 1,
       service: "Dog Walking",
       provider: {
-        name: "Sarah Johnson",
-        image: "/placeholder.svg?height=40&width=40",
-        rating: 4.9,
+        name: "Kunal Pawar",
+        image: "/placeholder.svg?height=40&width=40"
       },
+      pet: "Max",
       date: "Tomorrow",
-      time: "3:00 PM - 4:00 PM",
-      location: "Central Park",
-      status: "confirmed",
+      time: "3:00 PM",
+      status: "confirmed"
     },
     {
       id: 2,
       service: "Grooming",
       provider: {
         name: "Michael Chen",
-        image: "/placeholder.svg?height=40&width=40",
-        rating: 4.8,
+        image: "/placeholder.svg?height=40&width=40"
       },
-      date: "May 15, 2023",
-      time: "10:00 AM - 11:30 AM",
-      location: "Paws & Claws Salon",
-      status: "pending",
-    },
+      pet: "Luna",
+      date: "May 20, 2023",
+      time: "10:00 AM",
+      status: "confirmed"
+    }
   ]
 
   const recentBookings = [
     {
       id: 3,
-      service: "Dog Walking",
+      service: "Vet Checkup",
       provider: {
-        name: "Sarah Johnson",
-        image: "/placeholder.svg?height=40&width=40",
-        rating: 4.9,
+        name: "Dr. Sanket Verma",
+        image: "/images/e.png"
       },
-      date: "May 5, 2023",
-      time: "3:00 PM - 4:00 PM",
-      location: "Central Park",
+      pet: "Max",
+      date: "April 25, 2023",
+      time: "2:30 PM",
       status: "completed",
+      rating: 5
     },
     {
       id: 4,
-      service: "Pet Boarding",
+      service: "Pet Sitting",
       provider: {
-        name: "Jessica Williams",
-        image: "/placeholder.svg?height=40&width=40",
-        rating: 4.7,
+        name: "Emily Johnson",
+        image: "/placeholder.svg?height=40&width=40"
       },
-      date: "Apr 28-30, 2023",
-      time: "Full day",
-      location: "Cozy Pet Hotel",
+      pet: "Luna",
+      date: "April 10, 2023",
+      time: "8:00 AM - 6:00 PM",
       status: "completed",
-    },
-  ]
-
-  const pets = [
-    {
-      id: 1,
-      name: "Max",
-      type: "Dog",
-      breed: "Golden Retriever",
-      age: "3 years",
-      image: "/placeholder.svg?height=60&width=60",
-    },
-    {
-      id: 2,
-      name: "Luna",
-      type: "Cat",
-      breed: "Siamese",
-      age: "2 years",
-      image: "/placeholder.svg?height=60&width=60",
-    },
+      rating: 4
+    }
   ]
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-          <p className="text-muted-foreground">Welcome back! Here's what's happening with your pet care.</p>
-        </div>
-        <Button>Book a New Service</Button>
-      </div>
-
-      {/* Stats Overview */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Bookings</CardTitle>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">12</div>
-            <p className="text-xs text-muted-foreground">+2 from last month</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Favorite Providers</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">3</div>
-            <p className="text-xs text-muted-foreground">You have 3 preferred providers</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Spent</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">$350</div>
-            <p className="text-xs text-muted-foreground">+$120 from last month</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pet Care Hours</CardTitle>
-            <Clock className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">24h</div>
-            <p className="text-xs text-muted-foreground">+6h from last month</p>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Bookings */}
-      <Tabs defaultValue="upcoming" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="upcoming">Upcoming Bookings</TabsTrigger>
-          <TabsTrigger value="recent">Recent Bookings</TabsTrigger>
-        </TabsList>
-        <TabsContent value="upcoming" className="space-y-4">
-          {upcomingBookings.length > 0 ? (
-            upcomingBookings.map((booking) => (
-              <Card key={booking.id}>
-                <CardContent className="p-6">
-                  <div className="flex flex-col md:flex-row justify-between gap-4">
-                    <div className="flex items-start gap-4">
-                      <Avatar className="h-12 w-12">
-                        <AvatarImage src={booking.provider.image} />
-                        <AvatarFallback>{booking.provider.name.charAt(0)}</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <h3 className="font-semibold">{booking.service}</h3>
-                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                          <span>{booking.provider.name}</span>
-                          <span>•</span>
-                          <div className="flex items-center">
-                            <Star className="h-3 w-3 text-yellow-500 fill-yellow-500" />
-                            <span className="ml-1">{booking.provider.rating}</span>
-                          </div>
-                        </div>
-                        <div className="mt-2 flex flex-wrap gap-3">
-                          <div className="flex items-center text-sm">
-                            <Calendar className="mr-1 h-4 w-4 text-muted-foreground" />
-                            {booking.date}
-                          </div>
-                          <div className="flex items-center text-sm">
-                            <Clock className="mr-1 h-4 w-4 text-muted-foreground" />
-                            {booking.time}
-                          </div>
-                          <div className="flex items-center text-sm">
-                            <MapPin className="mr-1 h-4 w-4 text-muted-foreground" />
-                            {booking.location}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex flex-col items-end gap-2">
-                      <Badge variant={booking.status === "confirmed" ? "default" : "outline"}>
-                        {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
-                      </Badge>
-                      <div className="flex gap-2 mt-auto">
-                        <Button variant="outline" size="sm">
-                          Reschedule
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="text-destructive border-destructive hover:bg-destructive/10"
-                        >
-                          Cancel
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))
-          ) : (
-            <Card>
-              <CardContent className="p-6 text-center">
-                <p className="text-muted-foreground">No upcoming bookings</p>
-                <Button className="mt-4">Book a Service</Button>
-              </CardContent>
-            </Card>
-          )}
-        </TabsContent>
-        <TabsContent value="recent" className="space-y-4">
-          {recentBookings.map((booking) => (
-            <Card key={booking.id}>
-              <CardContent className="p-6">
-                <div className="flex flex-col md:flex-row justify-between gap-4">
-                  <div className="flex items-start gap-4">
-                    <Avatar className="h-12 w-12">
-                      <AvatarImage src={booking.provider.image} />
-                      <AvatarFallback>{booking.provider.name.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <h3 className="font-semibold">{booking.service}</h3>
-                      <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                        <span>{booking.provider.name}</span>
-                        <span>•</span>
-                        <div className="flex items-center">
-                          <Star className="h-3 w-3 text-yellow-500 fill-yellow-500" />
-                          <span className="ml-1">{booking.provider.rating}</span>
-                        </div>
-                      </div>
-                      <div className="mt-2 flex flex-wrap gap-3">
-                        <div className="flex items-center text-sm">
-                          <Calendar className="mr-1 h-4 w-4 text-muted-foreground" />
-                          {booking.date}
-                        </div>
-                        <div className="flex items-center text-sm">
-                          <Clock className="mr-1 h-4 w-4 text-muted-foreground" />
-                          {booking.time}
-                        </div>
-                        <div className="flex items-center text-sm">
-                          <MapPin className="mr-1 h-4 w-4 text-muted-foreground" />
-                          {booking.location}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex flex-col items-end gap-2">
-                    <Badge variant="secondary">
-                      {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
-                    </Badge>
-                    <div className="flex gap-2 mt-auto">
-                      <Button variant="outline" size="sm">
-                        Book Again
-                      </Button>
-                      <Button size="sm">Leave Review</Button>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </TabsContent>
-      </Tabs>
-
-      {/* My Pets */}
+    <div className="space-y-6">
       <div>
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">My Pets</h2>
-          <Button variant="outline" size="sm">
-            Add Pet
-          </Button>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {pets.map((pet) => (
-            <Card key={pet.id}>
-              <CardContent className="p-6">
-                <div className="flex items-center gap-4">
-                  <Avatar className="h-16 w-16">
-                    <AvatarImage src={pet.image} />
-                    <AvatarFallback>{pet.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <h3 className="font-semibold">{pet.name}</h3>
-                    <p className="text-sm text-muted-foreground">{pet.breed}</p>
-                    <div className="flex gap-2 mt-1">
-                      <Badge variant="outline">{pet.type}</Badge>
-                      <Badge variant="outline">{pet.age}</Badge>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex justify-end mt-4">
-                  <Button variant="outline" size="sm">
-                    View Profile
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+        <p className="text-muted-foreground">Welcome back! Here's an overview of your pet care activities.</p>
+      </div>
 
-          {/* Add Pet Card */}
-          <Card className="border-dashed">
-            <CardContent className="p-6 flex flex-col items-center justify-center h-full min-h-[180px]">
-              <div className="rounded-full bg-primary/10 p-3 mb-3">
-                <Plus className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="font-medium mb-1">Add a New Pet</h3>
-              <p className="text-sm text-muted-foreground text-center mb-3">
-                Add your pet's details for better service
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {stats.map((stat, index) => (
+          <Card key={index}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
+              <stat.icon className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stat.value}</div>
+              <p className="text-xs text-muted-foreground">{stat.description}</p>
+              <p className={`text-xs mt-1 ${
+                stat.changeType === "increase" ? "text-green-600" : "text-red-600"
+              }`}>
+                {stat.change}
               </p>
-              <Button variant="outline" size="sm">
-                Add Pet
-              </Button>
             </CardContent>
           </Card>
-        </div>
+        ))}
       </div>
-    </div>
-  )
-}
 
-function Plus(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 12h14" />
-      <path d="M12 5v14" />
-    </svg>
+      <div className="grid gap-4 md:grid-cols-2">
+        <Card className="col-span-1">
+          <CardHeader>
+            <CardTitle>Upcoming Bookings</CardTitle>
+            <CardDescription>Your next scheduled services</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {upcomingBookings.length > 0 ? (
+              upcomingBookings.map((booking) => (
+                <div key={booking.id} className="flex items-center space-x-4">
+                  <Avatar>
+                    <AvatarImage src={booking.provider.image} />
+                    <AvatarFallback>{booking.provider.name.charAt(0)}</AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 space-y-1">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-medium">{booking.service}</p>
+                      <Badge variant="outline" className="bg-blue-50 text-blue-700 hover:bg-blue-50">
+                        {booking.status}
+                      </Badge>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      For {booking.pet} • {booking.date} at {booking.time}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Provider: {booking.provider.name}
+                    </p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-6">
+                <p className="text-sm text-muted-foreground">No upcoming bookings</p>
+                <Button className="mt-4" size="sm" asChild>
+                  <Link href="/services">Book a Service</Link>
+                </Button>
+              </div>
+            )}
+          </CardContent>
+          <CardFooter>
+            <Button variant="outline" className="w-full" asChild>
+              <Link href="/dashboard/bookings">View All Bookings</Link>
+            </Button>
+          </CardFooter>
+        </Card>
+
+        <Card className="col-span-1">
+          <CardHeader>
+            <CardTitle>Recent Services</CardTitle>
+            <CardDescription>Services you've recently used</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {recentBookings.map((booking) => (
+              <div key={booking.id} className="flex items-center space-x-4">
+                <Avatar>
+                  <AvatarImage src={booking.provider.image} />
+                  <AvatarFallback>{booking.provider.name.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <div className="flex-1 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium">{booking.service}</p>
+                    <div className="flex">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <svg
+                          key={i}
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill={i < booking.rating ? "currentColor" : "none"}
+                          stroke="currentColor"
+                          className={`h-3 w-3 ${
+                            i < booking.rating ? "text-yellow-500" : "text-gray-300"
+                          }`}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+                          />
+                        </svg>
+                      ))}
+                    </div>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    For {booking.pet} • {booking.date}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Provider: {booking.provider.name}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </CardContent>
+          <CardFooter>
+            <Button variant="outline" className="w-full" asChild>
+              <Link href="/dashboard/bookings?tab=past">View Service History</Link>
+            </Button>
+          </CardFooter>
+        </Card>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Pet Care Progress</CardTitle>
+          <CardDescription>Track your pet care services over time</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <Users className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm font-medium">Walks Completed</span>
+                </div>
+                <span className="text-sm font-medium">8/10</span>
+              </div>
+              <Progress value={80} className="h-2" />
+              <p className="text-xs text-muted-foreground">2 more to reach your monthly goal</p>
+            </div>
+            
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm font-medium">Vet Checkups</span>
+                </div>
+                <span className="text-sm font-medium">1/2</span>
+              </div>
+              <Progress value={50} className="h-2" />
+              <p className="text-xs text-muted-foreground">Next checkup scheduled for June 15</p>
+            </div>
+            
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <Heart className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm font-medium">Grooming Sessions</span>
+                </div>
+                <span className="text-sm font-medium">2/3</span>
+              </div>
+              <Progress value={67} className="h-2" />
+              <p className="text-xs text-muted-foreground">1 more session recommended this month</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   )
 }

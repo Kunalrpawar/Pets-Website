@@ -59,6 +59,7 @@ export default function Home() {
       {/* ChatBot */}
       <ChatBot />
 
+      {/* Hero Section */}
       <HeroSection />
 
       {/* Search Section */}
@@ -111,6 +112,7 @@ export default function Home() {
             <TabsTrigger value="grooming">Pet Grooming</TabsTrigger>
             <TabsTrigger value="boarding">Pet Boarding</TabsTrigger>
             <TabsTrigger value="training">Pet Training</TabsTrigger>
+            <TabsTrigger value="ecommerce">Pet E-commerce</TabsTrigger>
           </TabsList>
 
           <TabsContent value="walking" className="mt-0">
@@ -150,7 +152,7 @@ export default function Home() {
                 description="Bath, brush, and nail trimming"
                 price={40}
                 rating={4.7}
-                image="/placeholder.svg?height=200&width=300"
+                image="/images/b.jpeg"
                 category="grooming"
               />
               <ServiceCard
@@ -158,7 +160,7 @@ export default function Home() {
                 description="Complete grooming package for all breeds"
                 price={65}
                 rating={4.9}
-                image="/placeholder.svg?height=200&width=300"
+                 image="/images/a.jpeg"
                 category="grooming"
                 featured={true}
               />
@@ -167,7 +169,7 @@ export default function Home() {
                 description="Custom cuts and styling for show dogs"
                 price={85}
                 rating={4.8}
-                image="/placeholder.svg?height=200&width=300"
+                 image="/images/d.jpeg"
                 category="grooming"
               />
             </div>
@@ -181,7 +183,7 @@ export default function Home() {
                 description="Your pet stays in a sitter's loving home"
                 price={45}
                 rating={4.7}
-                image="/placeholder.svg?height=200&width=300"
+                 image="/images/d.jpeg"
                 category="boarding"
               />
               <ServiceCard
@@ -189,7 +191,7 @@ export default function Home() {
                 description="Premium boarding with private suites and playtime"
                 price={75}
                 rating={4.9}
-                image="/placeholder.svg?height=200&width=300"
+                 image="/images/g.jpeg"
                 category="boarding"
                 featured={true}
               />
@@ -198,7 +200,7 @@ export default function Home() {
                 description="Specialized boarding just for cats with climbing trees"
                 price={40}
                 rating={4.8}
-                image="/placeholder.svg?height=200&width=300"
+                 image="/images/f.jpeg"
                 category="boarding"
               />
             </div>
@@ -211,7 +213,7 @@ export default function Home() {
                 description="Essential commands and behavior training"
                 price={50}
                 rating={4.6}
-                image="/placeholder.svg?height=200&width=300"
+                 image="/images/train1.jpg"
                 category="training"
               />
               <ServiceCard
@@ -219,7 +221,7 @@ export default function Home() {
                 description="Early socialization and basic training for puppies"
                 price={60}
                 rating={4.8}
-                image="/placeholder.svg?height=200&width=300"
+                 image="/images/train2.jpg"
                 category="training"
                 featured={true}
               />
@@ -228,7 +230,257 @@ export default function Home() {
                 description="Complex commands and specialized behaviors"
                 price={85}
                 rating={4.9}
-                image="/placeholder.svg?height=200&width=300"
+               image="/images/train3.jpg"
+                category="training"
+              />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="ecommerce" className="mt-0">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Food Products */}
+              <ServiceCard
+                title="Premium Dry Dog Food"
+                description="High-protein grain-free formula for active dogs"
+                price={45}
+                rating={4.8}
+                image="/images/dog.png"
+                category="food"
+              />
+              <ServiceCard
+                title="Organic Cat Food"
+                description="Natural ingredients for sensitive feline digestion"
+                price={38}
+                rating={4.7}
+                image="/images/cat.jpg"
+                category="food"
+              />
+              <ServiceCard
+                title="Puppy Growth Formula"
+                description="Essential nutrients for developing puppies"
+                price={42}
+                rating={4.9}
+                image="/images/b.jpeg"
+                category="food"
+                featured={true}
+              />
+              <ServiceCard
+                title="Senior Pet Food Blend"
+                description="Easy-to-digest formula for aging pets"
+                price={40}
+                rating={4.6}
+                image="/images/g.jpeg"
+                category="food"
+              />
+              <ServiceCard
+                title="Raw Food Diet Pack"
+                description="Fresh frozen raw diet for natural nutrition"
+                price={55}
+                rating={4.8}
+                image="/images/a.jpeg"
+                category="food"
+              />
+              
+              {/* Toys & Accessories */}
+              <ServiceCard
+                title="Interactive Dog Puzzle"
+                description="Mental stimulation toy for intelligent dogs"
+                price={25}
+                rating={4.7}
+                image="/images/d.jpeg"
+                category="toys"
+              />
+              <ServiceCard
+                title="Catnip Mouse Toys"
+                description="Set of 5 catnip-filled mouse toys"
+                price={15}
+                rating={4.8}
+                image="/images/f.jpeg"
+                category="toys"
+              />
+              <ServiceCard
+                title="Durable Chew Bone"
+                description="Long-lasting natural chew toy for heavy chewers"
+                price={18}
+                rating={4.9}
+                image="/images/train1.jpg"
+                category="toys"
+                featured={true}
+              />
+              <ServiceCard
+                title="Luxury Pet Bed"
+                description="Memory foam bed with washable cover"
+                price={65}
+                rating={4.8}
+                image="/images/dog walking.jpeg"
+                category="accessories"
+              />
+              <ServiceCard
+                title="Adjustable Pet Harness"
+                description="No-pull design with reflective strips"
+                price={32}
+                rating={4.7}
+                image="/images/group dog.jpeg"
+                category="accessories"
+              />
+              
+              {/* Grooming Products */}
+              <ServiceCard
+                title="Professional Grooming Kit"
+                description="Complete set of grooming tools for all breeds"
+                price={75}
+                rating={4.9}
+                image="/images/gropuss.jpeg"
+                category="grooming"
+              />
+              <ServiceCard
+                title="Deshedding Brush"
+                description="Reduces shedding by up to 90%"
+                price={28}
+                rating={4.8}
+                image="/images/train2.jpg"
+                category="grooming"
+              />
+              <ServiceCard
+                title="Natural Pet Shampoo"
+                description="Gentle formula for sensitive skin"
+                price={22}
+                rating={4.7}
+                image="/images/train3.jpg"
+                category="grooming"
+              />
+              <ServiceCard
+                title="Nail Trimmer Set"
+                description="Professional-grade with safety guard"
+                price={19}
+                rating={4.6}
+                image="/images/doc1.jpeg"
+                category="grooming"
+              />
+              <ServiceCard
+                title="Ear Cleaning Solution"
+                description="Prevents infections and removes wax"
+                price={15}
+                rating={4.7}
+                image="/images/doc2.jpeg"
+                category="grooming"
+              />
+              
+              {/* Health & Medicine */}
+              <ServiceCard
+                title="Joint Supplement Chews"
+                description="Glucosamine and chondroitin for joint health"
+                price={35}
+                rating={4.8}
+                image="/images/doc3.jpeg"
+                category="health"
+                featured={true}
+              />
+              <ServiceCard
+                title="Calming Anxiety Treats"
+                description="Natural ingredients to reduce stress and anxiety"
+                price={28}
+                rating={4.7}
+                image="/images/doc4.jpeg"
+                category="health"
+              />
+              <ServiceCard
+                title="Flea & Tick Prevention"
+                description="3-month supply of topical treatment"
+                price={45}
+                rating={4.9}
+                image="/images/d.jpeg"
+                category="health"
+              />
+              <ServiceCard
+                title="Pet First Aid Kit"
+                description="Essential supplies for emergency situations"
+                price={38}
+                rating={4.8}
+                image="/images/g.jpeg"
+                category="health"
+              />
+              <ServiceCard
+                title="Pet Dental Care Kit"
+                description="Toothbrush, paste, and dental chews"
+                price={24}
+                rating={4.6}
+                image="/images/a.jpeg"
+                category="health"
+              />
+              
+              {/* Specialty Items */}
+              <ServiceCard
+                title="Pet CBD Oil"
+                description="Organic hemp extract for anxiety and pain"
+                price={48}
+                rating={4.7}
+                image="/images/e.png"
+                category="specialty"
+              />
+              <ServiceCard
+                title="Automatic Pet Feeder"
+                description="Programmable with portion control"
+                price={85}
+                rating={4.8}
+                image="/images/c.jpeg"
+                category="tech"
+              />
+              <ServiceCard
+                title="Smart Pet Camera"
+                description="Two-way audio and treat dispenser"
+                price={120}
+                rating={4.9}
+                image="/images/b.jpeg"
+                category="tech"
+                featured={true}
+              />
+              <ServiceCard
+                title="Pet Water Fountain"
+                description="Filtered circulating water to encourage drinking"
+                price={45}
+                rating={4.7}
+                image="/images/f.jpeg"
+                category="accessories"
+              />
+              <ServiceCard
+                title="Pet Stroller"
+                description="All-terrain with weather protection"
+                price={95}
+                rating={4.6}
+                image="/images/train1.jpg"
+                category="accessories"
+              />
+              <ServiceCard
+                title="Pet Cologne Spray"
+                description="Long-lasting fresh scent, alcohol-free"
+                price={18}
+                rating={4.5}
+                image="/images/train2.jpg"
+                category="grooming"
+              />
+              <ServiceCard
+                title="Slow Feeder Bowl"
+                description="Prevents fast eating and bloating"
+                price={22}
+                rating={4.7}
+                image="/images/train3.jpg"
+                category="accessories"
+              />
+              <ServiceCard
+                title="Prescription Diet Food"
+                description="Veterinary formula for digestive health"
+                price={52}
+                rating={4.8}
+                image="/images/doc1.jpeg"
+                category="health"
+              />
+              <ServiceCard
+                title="Pet Training Clicker"
+                description="Professional training tool with wristband"
+                price={12}
+                rating={4.6}
+                image="/images/doc2.jpeg"
                 category="training"
               />
             </div>
@@ -244,45 +496,45 @@ export default function Home() {
         <h2 className="text-3xl font-bold mb-8">Top-Rated Service Providers</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <ProviderCard
-            name="Sarah Johnson"
+            name="Kunal Pawar"
             role="Dog Walker & Trainer"
             rating={4.9}
-            reviews={124}
-            image="/placeholder.svg?height=300&width=300"
-            location="Brooklyn, NY"
+            reviews={128}
+            image="/images/doc1.jpeg"
+            location="Vadgoansheri, Pune"
             verified={true}
           />
           <ProviderCard
-            name="Michael Chen"
+            name="Sahil Kulkarni"
             role="Professional Groomer"
             rating={4.8}
-            reviews={98}
-            image="/placeholder.svg?height=300&width=300"
-            location="Queens, NY"
+            reviews={96}
+            image="/images/doc2.jpeg"
+            location="Mumbai, Maharashtra"
             verified={true}
           />
           <ProviderCard
-            name="Jessica Williams"
+            name="Pratham Kokardekar"
             role="Pet Boarder"
-            rating={4.7}
-            reviews={56}
-            image="/placeholder.svg?height=300&width=300"
-            location="Manhattan, NY"
+            rating={4.9}
+            reviews={152}
+            image="/images/doc3.jpeg"
+            location="Kalyani Nagar, Pune"
             verified={true}
           />
           <ProviderCard
-            name="David Rodriguez"
+            name="Sanket Kulkarni"
             role="Dog Walker"
-            rating={4.6}
-            reviews={42}
-            image="/placeholder.svg?height=300&width=300"
-            location="Bronx, NY"
-            verified={false}
+            rating={4.7}
+            reviews={84}
+            image="/images/doc4.jpeg"
+            location="Kothrud, Pune"
+            verified={true}
           />
         </div>
         <div className="text-center mt-8">
-          <Link href="/providers">
-            <Button size="lg">View All Providers</Button>
+          <Link href="/doctors">
+            <Button size="lg">Book a Doctor</Button>
           </Link>
         </div>
       </section>
@@ -298,21 +550,21 @@ export default function Home() {
             author="Emma Thompson"
             petType="Labrador owner"
             rating={5}
-            image="/placeholder.svg?height=100&width=100"
+            image="/images/a.jpeg"
           />
           <TestimonialCard
             quote="The grooming service was top-notch. My poodle has never looked better!"
             author="James Wilson"
             petType="Poodle owner"
             rating={5}
-            image="/placeholder.svg?height=100&width=100"
+            image="/images/e.png"
           />
           <TestimonialCard
             quote="I was nervous about boarding my cat, but the updates and photos gave me peace of mind."
             author="Sophia Garcia"
             petType="Cat owner"
             rating={4}
-            image="/placeholder.svg?height=100&width=100"
+           image="/images/f.jpeg"
           />
         </div>
       </section>

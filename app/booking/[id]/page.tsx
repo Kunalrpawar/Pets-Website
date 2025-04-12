@@ -200,11 +200,11 @@ export default function BookingPage({ params }: { params: { id: string } }) {
                   <div className="mt-8 border-t pt-6">
                     <div className="flex justify-between mb-4">
                       <span>Service Fee</span>
-                      <span>${service.price}</span>
+                      <span>Rs{service.price}</span>
                     </div>
                     <div className="flex justify-between mb-4 text-sm text-muted-foreground">
                       <span>Platform Fee</span>
-                      <span>$2.00</span>
+                      <span>Rs.2.00</span>
                     </div>
                     <div className="flex justify-between font-semibold text-lg">
                       <span>Total</span>

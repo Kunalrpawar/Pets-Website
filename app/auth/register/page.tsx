@@ -39,7 +39,9 @@ export default function RegisterPage() {
             <p className="text-lg">
               "Joining PetPals as a dog walker has been amazing. I get to do what I love and make pet parents happy!"
             </p>
-            <footer className="text-sm">Sarah Johnson, Professional Dog Walker</footer>
+            <footer className="text-sm">
+              Kunal Pawar, Dog Walker & Trainer - Vadgoansheri, Pune
+            </footer>
           </blockquote>
         </div>
       </div>

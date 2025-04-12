@@ -6,9 +6,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Slider } from "@/components/ui/slider"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ServiceCard } from "@/components/service-card"
-import { Search, MapPin, SlidersHorizontal, Star } from "lucide-react"
+import { Search, MapPin, SlidersHorizontal, Star, Video } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
+import { JitsiMeet } from "@/components/jitsi-meet"
 
 export default function ServicesPage() {
   // This would come from your database in a real app
@@ -17,7 +18,7 @@ export default function ServicesPage() {
       id: 1,
       title: "Daily Dog Walking",
       description: "Professional dog walkers for your furry friend",
-      price: 20,
+      price: 1500,
       rating: 4.8,
       image: "/images/dog walking.jpeg",
       category: "walking",
@@ -27,7 +28,7 @@ export default function ServicesPage() {
       id: 2,
       title: "Group Dog Walking",
       description: "Socialization and exercise in a group setting",
-      price: 15,
+      price: 1000,
       rating: 4.6,
       image: "/images/group dog.jpeg",
       category: "walking",
@@ -37,7 +38,7 @@ export default function ServicesPage() {
       id: 3,
       title: "Premium Dog Walking",
       description: "One-on-one attention with photo updates",
-      price: 30,
+      price: 2000,
       rating: 4.9,
       image: "/images/gropuss.jpeg",
       category: "walking",
@@ -47,9 +48,9 @@ export default function ServicesPage() {
       id: 4,
       title: "Basic Grooming",
       description: "Bath, brush, and nail trimming",
-      price: 40,
+      price: 2500,
       rating: 4.7,
-      image: "/placeholder.svg?height=200&width=300",
+      image :"/images/a.jpeg",
       category: "grooming",
       featured: false,
     },
@@ -57,9 +58,9 @@ export default function ServicesPage() {
       id: 5,
       title: "Full Service Grooming",
       description: "Complete grooming package for all breeds",
-      price: 65,
+      price: 3500,
       rating: 4.9,
-      image: "/placeholder.svg?height=200&width=300",
+      image :"/images/b.jpeg",
       category: "grooming",
       featured: true,
     },
@@ -67,9 +68,9 @@ export default function ServicesPage() {
       id: 6,
       title: "Specialty Styling",
       description: "Custom cuts and styling for show dogs",
-      price: 85,
+      price: 4500,
       rating: 4.8,
-      image: "/placeholder.svg?height=200&width=300",
+      image :"/images/d.jpeg",
       category: "grooming",
       featured: false,
     },
@@ -77,9 +78,9 @@ export default function ServicesPage() {
       id: 7,
       title: "Home Pet Boarding",
       description: "Your pet stays in a sitter's loving home",
-      price: 45,
+      price: 3000,
       rating: 4.7,
-      image: "/placeholder.svg?height=200&width=300",
+      image :"/images/e.png",
       category: "boarding",
       featured: false,
     },
@@ -87,9 +88,9 @@ export default function ServicesPage() {
       id: 8,
       title: "Luxury Pet Hotel",
       description: "Premium boarding with private suites and playtime",
-      price: 75,
+      price: 5000,
       rating: 4.9,
-      image: "/placeholder.svg?height=200&width=300",
+      image :"/images/f.jpeg",
       category: "boarding",
       featured: true,
     },
@@ -97,9 +98,9 @@ export default function ServicesPage() {
       id: 9,
       title: "Basic Training",
       description: "Essential commands and behavior training",
-      price: 50,
+      price: 3500,
       rating: 4.6,
-      image: "/placeholder.svg?height=200&width=300",
+      image :"/images/g.jpeg",
       category: "training",
       featured: false,
     },
@@ -110,10 +111,11 @@ export default function ServicesPage() {
   const [searchQuery, setSearchQuery] = useState(searchParams?.get('q') || "");
   const [locationQuery, setLocationQuery] = useState(searchParams?.get('loc') || "");
   const [activeTab, setActiveTab] = useState("all");
-  const [priceRange, setPriceRange] = useState([0, 200]);
+  const [priceRange, setPriceRange] = useState([0, 6000]);
   const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
   const [selectedServiceTypes, setSelectedServiceTypes] = useState<string[]>([]);
   const [filteredServices, setFilteredServices] = useState(services);
+  const [isMeetingOpen, setIsMeetingOpen] = useState(false)
 
   // Apply filters
   useEffect(() => {
@@ -193,7 +195,7 @@ export default function ServicesPage() {
     setSearchQuery("");
     setLocationQuery("");
     setActiveTab("all");
-    setPriceRange([0, 200]);
+    setPriceRange([0, 6000]);
     setSelectedRatings([]);
     setSelectedServiceTypes([]);
   };
@@ -202,6 +204,13 @@ export default function ServicesPage() {
     <main className="min-h-screen">
       <section className="bg-primary text-primary-foreground py-12">
         <div className="container mx-auto px-4">
+          <div className="flex justify-center mb-12">
+            <img 
+              src="/images/logo.png" 
+              alt="PetPals Logo" 
+              className="h-32 w-auto object-contain bg-white p-4 rounded-lg shadow-lg"
+            />
+          </div>
           <h1 className="text-3xl md:text-4xl font-bold mb-4">Find Pet Care Services</h1>
           <p className="text-lg mb-8 max-w-2xl">Browse and book trusted pet care services in your area</p>
 
@@ -279,16 +288,19 @@ export default function ServicesPage() {
 
                   {/* Price Range */}
                   <div>
-                    <h4 className="font-medium mb-3">Price Range</h4>
-                    <Slider 
-                      value={priceRange} 
-                      max={200} 
-                      step={1} 
-                      onValueChange={(value) => setPriceRange(value as number[])}
-                    />
-                    <div className="flex justify-between mt-2">
-                      <span className="text-sm">${priceRange[0]}</span>
-                      <span className="text-sm">${priceRange[1]}</span>
+                    <h4 className="font-medium mb-3">Price Range (Rs)</h4>
+                    <div className="space-y-4">
+                      <Slider
+                        min={0}
+                        max={6000}
+                        step={500}
+                        value={priceRange}
+                        onValueChange={setPriceRange}
+                      />
+                      <div className="flex justify-between text-sm text-muted-foreground">
+                        <span>Rs {priceRange[0]}</span>
+                        <span>Rs {priceRange[1]}</span>
+                      </div>
                     </div>
                   </div>
 
@@ -349,12 +361,24 @@ export default function ServicesPage() {
               onValueChange={setActiveTab} 
               className="w-full"
             >
-              <TabsList className="mb-8">
-                <TabsTrigger value="all">All Services</TabsTrigger>
-                <TabsTrigger value="walking">Dog Walking</TabsTrigger>
-                <TabsTrigger value="grooming">Pet Grooming</TabsTrigger>
-                <TabsTrigger value="boarding">Pet Boarding</TabsTrigger>
-                <TabsTrigger value="training">Pet Training</TabsTrigger>
+              <TabsList className="mb-8 flex items-center justify-between w-full">
+                <div className="flex flex-wrap gap-2">
+                  <TabsTrigger value="all">All Services</TabsTrigger>
+                  <TabsTrigger value="walking">Dog Walking</TabsTrigger>
+                  <TabsTrigger value="grooming">Pet Grooming</TabsTrigger>
+                  <TabsTrigger value="boarding">Pet Boarding</TabsTrigger>
+                  <TabsTrigger value="training">Pet Training</TabsTrigger>
+                </div>
+                {activeTab === "training" && (
+                  <Button
+                    variant="default"
+                    className="ml-4 flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
+                    onClick={() => setIsMeetingOpen(true)}
+                  >
+                    <Video className="h-4 w-4" />
+                    Join Virtual Training
+                  </Button>
+                )}
               </TabsList>
 
               <TabsContent value="all" className="mt-0">
@@ -417,6 +441,10 @@ export default function ServicesPage() {
           </div>
         </div>
       </section>
+
+      {isMeetingOpen && (
+        <JitsiMeet onClose={() => setIsMeetingOpen(false)} />
+      )}
     </main>
   )
 }
