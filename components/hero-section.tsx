@@ -120,6 +120,14 @@ export function HeroSection() {
               >
                 Become a Provider
               </Button>
+              <Link href="/dashboard">
+                <Button
+                  variant="outline"
+                  className="bg-white text-primary hover:bg-white/90"
+                >
+                  Dashboard
+                </Button>
+              </Link>
             </div>
           </div>
           <div className="hidden lg:block">

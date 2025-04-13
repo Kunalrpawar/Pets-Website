@@ -122,8 +122,7 @@ export default function BookingPage({ params }: { params: { id: string } }) {
                 </div>
 
                 <div className="font-semibold text-xl">
-                  ${service.price}
-                  <span className="text-sm text-muted-foreground">/hour</span>
+                  ₹{service.price}
                 </div>
               </CardContent>
             </Card>
@@ -200,15 +199,15 @@ export default function BookingPage({ params }: { params: { id: string } }) {
                   <div className="mt-8 border-t pt-6">
                     <div className="flex justify-between mb-4">
                       <span>Service Fee</span>
-                      <span>Rs{service.price}</span>
+                      <span>₹{service.price}</span>
                     </div>
                     <div className="flex justify-between mb-4 text-sm text-muted-foreground">
                       <span>Platform Fee</span>
-                      <span>Rs.2.00</span>
+                      <span>₹2.00</span>
                     </div>
                     <div className="flex justify-between font-semibold text-lg">
                       <span>Total</span>
-                      <span>${(service.price + 2).toFixed(2)}</span>
+                      <span>₹{(service.price + 2).toFixed(2)}</span>
                     </div>
                   </div>
                 </form>

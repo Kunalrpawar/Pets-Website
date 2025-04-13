@@ -29,10 +29,10 @@ export default function DashboardPage() {
     },
     {
       title: "Total Spent",
-      value: "$680",
+      value: "₹680",
       icon: DollarSign,
       description: "Last 30 days",
-      change: "-$45 from last month",
+      change: "- Rs.45 from last month",
       changeType: "decrease"
     },
     {
@@ -274,6 +274,12 @@ export default function DashboardPage() {
           </div>
         </CardContent>
       </Card>
+
+      <div className="flex justify-center mt-8">
+        <Button size="lg" variant="outline" asChild>
+          <Link href="/">Back to Home</Link>
+        </Button>
+      </div>
     </div>
   )
 }

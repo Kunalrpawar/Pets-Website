@@ -58,7 +58,7 @@ export function ServiceCard({
             <Star className="h-4 w-4 fill-primary text-primary" />
             <span className="font-medium">{rating}</span>
           </div>
-          <div className="font-semibold">Rs {price}/hr</div>
+          <div className="font-semibold">₹ {price}</div>
         </div>
       </CardContent>
       <CardFooter className="p-6 pt-0">
